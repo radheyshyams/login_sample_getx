@@ -9,16 +9,20 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
   final authProvider = Get.put(AuthProvider());
   final authRepository = Get.put(AuthRepository()); // Inject the repository
+  final formKey = GlobalKey<FormState>();
 
 
   final isLoading = false.obs;
   final errorMessage = RxnString();
+  var isFormValid = false.obs;
 
   @override
   void onInit() {
 
     Get.put(AuthProvider()); // Initialize AuthProvider
     Get.put(AuthRepository()); // Initialize AuthRepository
+    emailController.addListener(validateForm);
+    passwordController.addListener(validateForm);
     super.onInit();
   }
 
@@ -28,6 +32,11 @@ class LoginController extends GetxController {
     }
     return null;
   }
+
+  void validateForm() {
+    isFormValid.value = emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+  }
+
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty || value.length < 6) {

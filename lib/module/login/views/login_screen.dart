@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
 
 class LoginScreen extends GetView<LoginController> {
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class LoginScreen extends GetView<LoginController> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20.0),
           child: Form(
-            key: _formKey,
+            key: controller.formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -41,13 +41,11 @@ class LoginScreen extends GetView<LoginController> {
 
                 SizedBox(height: 30.0),
                 Obx(() => ElevatedButton(
-                    onPressed: controller.isLoading.value
-                      ? null // Disable button while loading
-                      : () {
-                      if (_formKey.currentState!.validate()) {
+                    onPressed: controller.isFormValid.value ? () {
+                      if (controller.formKey.currentState!.validate()) {
                         controller.login();
                       }
-                    },
+                    } : null,
                     child: controller.isLoading.value ? CircularProgressIndicator() : Text('Login'),
                   ),
                 ),
